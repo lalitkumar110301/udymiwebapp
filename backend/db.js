@@ -1,7 +1,7 @@
 // connecting to the mongodb server locally
 
 const mongoose = require('mongoose')
-const mongoURI = "mongodb://127.0.0.1:27017/udymi"
+const mongoURI = process.env.MONGO_URI
 
 const connectToMongo = async () => {
     mongoose.connect(mongoURI)

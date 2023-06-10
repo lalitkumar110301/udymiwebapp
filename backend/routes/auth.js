@@ -17,7 +17,8 @@ Doesn't require authenticating user
 router.post('/createuser/student', [
     body('name', 'name must be atleast 3 characters').isLength({ min: 2 }),
     body('email', 'enter a valid email').isEmail(),
-    body('password', 'password must be atleast 8 characters').isLength({ min: 8 })
+    body('password', 'password must be atleast 8 characters').isLength({ min: 8 }),
+    body('degree', 'please provide your degree').isLength({ min: 1 })
 ], async (req, res) => {
 
     // getting validation errors if any
@@ -28,6 +29,7 @@ router.post('/createuser/student', [
 
     try {
         const { name, email, password, degree } = req.body;
+
         let student = await Student.findOne({ email: email })
 
         // if student is already registered
@@ -122,7 +124,7 @@ router.post('/createuser/agency', [
     // getting validation errors if any
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
+        return res.status(400).json({ error: errors.array() })
     }
 
     try {

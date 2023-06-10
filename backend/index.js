@@ -1,9 +1,9 @@
+require('dotenv').config()
 const connectToMongo = require('./db')
 const express = require('express')
-require('dotenv').config()
 
 const app = express()
-const port = 5001
+const port = process.env.PORT
 
 
 // cors is used to allow browser to make api calls from localhost
