@@ -6,6 +6,11 @@ const problemStatementSchema = new mongoose.Schema({
         required: true,
     },
 
+    problemDescription: {
+        type: String,
+        required: true
+    },
+
     // either students or institutions can put up their problem statement
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,

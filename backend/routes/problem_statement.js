@@ -9,16 +9,16 @@ router.post('/add', async (req, res) => {
 
     try {
 
-        const { problemTitle, createdBy, startDate, endDate } = req.body;
+        const { problemTitle, problemDescription, createdBy, startDate, endDate } = req.body;
 
-        if (!problemTitle || !startDate || !endDate) {
+        if (!problemTitle || !problemDescription || !startDate || !endDate) {
             return res.status(400).json({ error: "invalid input" })
         }
 
         else {
-            const newProblemStatement = await ProblemStatement.create({ problemTitle, createdBy, startDate, endDate })
+            const newProblemStatement = await ProblemStatement.create({ problemTitle, problemDescription, createdBy, startDate, endDate })
 
-            return res.status(200).json({ newProblemStatement })
+            return res.status(200).json({ success: true, message: "successfully added problem statement" })
         }
     } catch (error) {
         console.log('error -> ', error.message)

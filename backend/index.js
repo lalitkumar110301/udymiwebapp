@@ -23,7 +23,8 @@ app.use(express.json())
 
 // all available routes
 app.use('/api/auth/', require('./routes/auth.js'))
-app.use('/api/udymi/problemstatement/', require('./routes/udymi.js'))
+app.use('/api/udymi/problemstatement/', require('./routes/problem_statement.js'))
+app.use('/api/udymi/startupcompetitions/', require('./routes/startup_competitions.js'))
 
 
 app.listen(port, () => {
