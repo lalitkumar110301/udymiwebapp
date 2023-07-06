@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const ProblemStatement = require('../models/Udymi/ProblemStatement');
 const StartupCompetition = require('../models/Udymi/StartupCompetition');
 
 // add competition details
@@ -86,19 +85,43 @@ router.get('/getall', async (req, res) => {
 
 
 // get competition details by name or active status or both
-// router.get('/search', async (req, res) => {
-//     try {
-//         const query = req.query
-//         const result = await StartupCompetition.find({
-//             name: new RegExp(query.name, 'i'),
-//             active: query.active,
-//         });
-//         res.status(200).json({ result })
-//     } catch (error) {
-//         console.log(error.message)
-//         return res.status(500).json({ error: "something went wrong while getting competitions" })
-//     }
-// })
+router.get('/search', async (req, res) => {
+    try {
+        const query = req.query
+        let searchResult;
+
+        if (query.name && !query.active) {
+            const result = await StartupCompetition.find({
+                name: new RegExp(query.name, 'i'),
+            });
+
+            searchResult = result
+        }
+
+        if (query.active && !query.name) {
+            const result = await StartupCompetition.find({
+                active: query.active,
+            });
+
+            searchResult = result
+        }
+
+        if (query.name && query.active) {
+            const result = await StartupCompetition.find({
+                name: new RegExp(query.name, 'i'),
+                active: query.active,
+            });
+
+            searchResult = result
+        }
+
+
+        res.status(200).json({ searchResult })
+    } catch (error) {
+        console.log(error.message)
+        return res.status(500).json({ error: "something went wrong while getting competitions" })
+    }
+})
 
 
 module.exports = router;

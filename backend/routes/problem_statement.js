@@ -27,7 +27,6 @@ router.post('/add', async (req, res) => {
 
 })
 
-
 // fetch all the problem statements corresponding to currently logged in user
 router.get('/fetchall', fetchuser, async (req, res) => {
     try {
@@ -60,6 +59,47 @@ router.delete('/delete/:problemid', async (req, res) => {
         console.log('error -> ', error.message)
         return res.status(500).json({ error: "internal server error while deleting problem statements" })
     }
+})
+
+// update problem statement using id
+router.put('/update/:id', async (req, res) => {
+    try {
+        const result = await ProblemStatement.findById(req.params.id)
+        if (!result) {
+            return res.status(400).json({ error: "Problem Statement Not Found" })
+        }
+
+        const { problemTitle, problemDescription, startDate, endDate } = req.body;
+        let newProblemStatement = {}
+
+        if (problemTitle) newProblemStatement.problemTitle = problemTitle
+        if (problemDescription) newProblemStatement.problemDescription = problemDescription
+        if (startDate) newProblemStatement.startDate = startDate
+        if (endDate) newProblemStatement.endDate = endDate
+
+        const updatedDetails = await ProblemStatement.findByIdAndUpdate(req.params.id, { $set: newProblemStatement }, { new: true })
+
+        return res.status(200).json({ success: true, message: "successfully updated" })
+
+    } catch (error) {
+        console.log('error -> ', error.message)
+        return res.status(500).json({ error: "internal server error while updating" })
+    }
+})
+
+
+// search for a problem statement by using problemTitle field
+router.get('/search', async (req, res) => {
+    const query = req.query;
+    try {
+        const result = await ProblemStatement.find({ problemTitle: new RegExp(query.title, 'i') })
+        return res.status(200).json({ result })
+
+    } catch (error) {
+        console.log('error -> ', error.message)
+        return res.status(500).json({ error: "internal server error while searching" })
+    }
+
 })
 
 module.exports = router;
