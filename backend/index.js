@@ -1,6 +1,8 @@
 require('dotenv').config()
 const connectToMongo = require('./db')
 const express = require('express')
+const bodyParser = require('body-parser')
+
 
 const app = express()
 const port = process.env.PORT
@@ -10,6 +12,9 @@ const port = process.env.PORT
 var cors = require('cors')
 app.use(cors())
 
+app.use(express.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 // connecting to mongodb
 connectToMongo().then(() => {
@@ -25,6 +30,7 @@ app.use(express.json())
 app.use('/api/auth/', require('./routes/auth.js'))
 app.use('/api/udymi/problemstatement/', require('./routes/problem_statement.js'))
 app.use('/api/udymi/startupcompetitions/', require('./routes/startup_competitions.js'))
+app.use('/api/udymi/ideas/', require('./routes/idea_submission.js'))
 
 
 app.listen(port, () => {
